@@ -62,46 +62,46 @@ document.getElementById('next').onclick = () => {
 };
 
 renderCalendar();
+
 const calendarContainer = document.getElementById('calendarContainer');
 
 let startX = 0;
 let endX = 0;
-let isMouseDown = false;
 
 // --- Touch support ---
 calendarContainer.addEventListener('touchstart', e => {
-  startX = e.changedTouches[0].screenX;
-});
-calendarContainer.addEventListener('touchend', e => {
-  endX = e.changedTouches[0].screenX;
-  handleSwipeOrDrag();
+  if (e.touches.length === 1) {
+    startX = e.touches[0].clientX;
+  }
 });
 
-// --- Mouse support ---
+calendarContainer.addEventListener('touchend', e => {
+  if (e.changedTouches.length === 1) {
+    endX = e.changedTouches[0].clientX;
+    handleSwipeOrDrag();
+  }
+});
+
+// --- Mouse drag (already included previously) ---
 calendarContainer.addEventListener('mousedown', e => {
+  startX = e.clientX;
   isMouseDown = true;
-  startX = e.screenX;
 });
 calendarContainer.addEventListener('mouseup', e => {
   if (!isMouseDown) return;
-  endX = e.screenX;
+  endX = e.clientX;
   isMouseDown = false;
   handleSwipeOrDrag();
 });
 
-// --- Shared logic ---
 function handleSwipeOrDrag() {
   const distance = endX - startX;
-
-  if (Math.abs(distance) < 50) return; // Ignore small movements
+  if (Math.abs(distance) < 50) return;
 
   if (distance > 0) {
-    // Drag/swipe right
     date.setMonth(date.getMonth() - 1);
   } else {
-    // Drag/swipe left
     date.setMonth(date.getMonth() + 1);
   }
-
   renderCalendar();
 }
