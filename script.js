@@ -50,6 +50,35 @@ function renderCalendar() {
 }
 
 
+const calendarContainer = document.getElementById('calendarContainer');
+
+let touchStartX = 0;
+let touchEndX = 0;
+
+calendarContainer.addEventListener('touchstart', e => {
+  touchStartX = e.changedTouches[0].screenX;
+});
+
+calendarContainer.addEventListener('touchend', e => {
+  touchEndX = e.changedTouches[0].screenX;
+  handleGesture();
+});
+
+function handleGesture() {
+  const swipeDistance = touchEndX - touchStartX;
+
+  if (Math.abs(swipeDistance) < 50) return; // ignore small swipes
+
+  if (swipeDistance > 0) {
+    // Swipe Right → Previous month
+    date.setMonth(date.getMonth() - 1);
+  } else {
+    // Swipe Left → Next month
+    date.setMonth(date.getMonth() + 1);
+  }
+
+  renderCalendar();
+}
 
 
 document.getElementById('prev').onclick = () => {

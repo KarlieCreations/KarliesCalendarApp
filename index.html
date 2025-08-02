@@ -13,10 +13,11 @@
 
     <!-- Month navigation -->
     <div class="flex justify-between items-center mb-4">
-      <button id="prev" class="text-lg">←</button>
-      <h1 id="monthYear" class="text-2xl font-semibold text-center flex-grow"></h1>
-      <button id="next" class="text-lg">→</button>
-    </div>
+  <button id="prev" class="text-3xl p-2 rounded-full hover:bg-gray-200 transition">←</button>
+  <h1 id="monthYear" class="text-2xl font-semibold text-center flex-grow"></h1>
+  <button id="next" class="text-3xl p-2 rounded-full hover:bg-gray-200 transition">→</button>
+</div>
+
 
     <!-- Weekday headers (German, starts on Monday) -->
     <div class="grid grid-cols-7 gap-1 text-center text-sm font-medium">
@@ -24,9 +25,10 @@
     </div>
 
     <!-- New wrapper for scrollable calendar that fills remaining space -->
-<div class="flex-grow overflow-auto">
+<div id="calendarContainer" class="flex-grow overflow-auto">
   <div id="calendar" class="grid grid-cols-7 gap-1 mt-2 h-full"></div>
 </div>
+
   </div>
 
   <script src="script.js"></script>
