@@ -2,6 +2,16 @@ const calendar = document.getElementById('calendar');
 const monthYear = document.getElementById('monthYear');
 let date = new Date();
 
+const checklistModal = document.getElementById('checklistModal');
+const checklistTitle = document.getElementById('checklistTitle');
+const checklistItems = document.getElementById('checklistItems');
+const addItemBtn = document.getElementById('addItemBtn');
+const newItemInput = document.getElementById('newItemInput');
+const backToCalendar = document.getElementById('backToCalendar');
+
+let selectedDayKey = null; // Format: MM-DD
+
+
 function renderCalendar() {
   calendar.innerHTML = '';
 
@@ -28,6 +38,12 @@ function renderCalendar() {
   for (let day = 1; day <= daysInMonth; day++) {
     const dayCell = document.createElement('div');
     dayCell.textContent = day;
+	dayCell.addEventListener('click', () => {
+	  const dayStr = day.toString().padStart(2, '0');
+	  const monthStr = (month + 1).toString().padStart(2, '0');
+	  selectedDayKey = `${monthStr}-${dayStr}`;
+	  showChecklist(selectedDayKey);
+	});
 
     // ✅ New square + centering style
     dayCell.style.aspectRatio = '1 / 1'; // keeps it square
@@ -105,3 +121,78 @@ function handleSwipeOrDrag() {
   }
   renderCalendar();
 }
+
+
+function showChecklist(key) {
+  checklistTitle.textContent = `Checkliste für ${key}`;
+  checklistModal.classList.remove('hidden');
+  renderChecklist();
+}
+
+function hideChecklist() {
+  checklistModal.classList.add('hidden');
+}
+
+function getChecklist() {
+  return JSON.parse(localStorage.getItem('checklist-' + selectedDayKey) || '[]');
+}
+
+function saveChecklist(items) {
+  localStorage.setItem('checklist-' + selectedDayKey, JSON.stringify(items));
+}
+
+function renderChecklist() {
+  const items = getChecklist();
+  checklistItems.innerHTML = '';
+
+  // Sort: unchecked first
+  const sorted = items.sort((a, b) => a.checked - b.checked);
+
+  sorted.forEach((item, index) => {
+    const li = document.createElement('li');
+    li.className = 'flex items-center gap-2';
+
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = item.checked;
+    checkbox.addEventListener('change', () => {
+      item.checked = checkbox.checked;
+      saveChecklist(items);
+      renderChecklist(); // re-render to reorder
+    });
+
+    const span = document.createElement('span');
+    span.textContent = item.text;
+    if (item.checked) span.classList.add('line-through', 'text-gray-400');
+
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = '🗑';
+    deleteBtn.className = 'ml-auto';
+    deleteBtn.addEventListener('click', () => {
+      items.splice(index, 1);
+      saveChecklist(items);
+      renderChecklist();
+    });
+
+    li.appendChild(checkbox);
+    li.appendChild(span);
+    li.appendChild(deleteBtn);
+    checklistItems.appendChild(li);
+  });
+}
+
+addItemBtn.addEventListener('click', () => {
+  const text = newItemInput.value.trim();
+  if (!text) return;
+
+  const items = getChecklist();
+  items.push({ text, checked: false });
+  saveChecklist(items);
+  newItemInput.value = '';
+  renderChecklist();
+});
+
+backToCalendar.addEventListener('click', () => {
+  hideChecklist();
+});
+
