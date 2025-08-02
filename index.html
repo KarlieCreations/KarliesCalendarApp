@@ -1,29 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Calendar App</title>
+  <title>Kalender App</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-50 text-gray-800 min-h-screen flex flex-col">
 
-  <div class="flex flex-col flex-grow max-w-xl tablet:max-w-3xl mx-auto w-full p-4">
+  <!-- Main container that grows full height -->
+  <div class="flex flex-col flex-grow w-full h-full">
 
-    <div class="flex justify-between items-center mb-4">
-      <button id="prev" class="text-lg">←</button>
-      <h1 id="monthYear" class="text-2xl font-semibold text-center flex-grow"></h1>
-      <button id="next" class="text-lg">→</button>
+    <!-- Header with navigation -->
+    <div class="flex justify-between items-center p-4">
+      <button id="prev" class="text-xl font-bold">←</button>
+      <h1 id="monthYear" class="text-2xl font-semibold text-center flex-grow text-center"></h1>
+      <button id="next" class="text-xl font-bold">→</button>
     </div>
-    <div class="grid grid-cols-7 gap-1 text-center text-sm font-medium">
-  <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
-</div>
 
-<!-- New wrapper for scrollable calendar that fills remaining space -->
-<div class="flex-grow overflow-auto">
-  <div id="calendar" class="grid grid-cols-7 gap-1 mt-2 h-full"></div>
-</div>
+    <!-- Weekday labels -->
+    <div class="grid grid-cols-7 gap-1 px-4 text-center text-sm font-medium">
+      <div>Mo</div><div>Di</div><div>Mi</div><div>Do</div><div>Fr</div><div>Sa</div><div>So</div>
+    </div>
 
+    <!-- Scrollable calendar grid -->
+    <div class="flex-grow overflow-auto px-4 pb-4">
+      <div id="calendar" class="grid grid-cols-7 gap-1 h-full"></div>
+    </div>
+  </div>
 
   <script src="script.js"></script>
 </body>
