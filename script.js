@@ -38,6 +38,21 @@ function renderCalendar() {
   for (let day = 1; day <= daysInMonth; day++) {
     const dayCell = document.createElement('div');
     dayCell.textContent = day;
+	const dayStr = day.toString().padStart(2, '0');
+	const monthStr = (month + 1).toString().padStart(2, '0');
+	const key = `${monthStr}-${dayStr}`;
+	const checklist = JSON.parse(localStorage.getItem('checklist-' + key) || '[]');
+	const hasChecklist = checklist.length > 0;
+
+	// Add marker dot
+	if (hasChecklist) {
+	  const dot = document.createElement('div');
+	  dot.className = 'absolute top-1 left-1 w-4 h-4 rounded-full';
+	  dot.style.backgroundColor =
+		isCurrentMonth && day === today.getDate() ? '#FF00AA' : '#dc2626'; // Neon pink or red
+	  dayCell.appendChild(dot);
+	}
+
 	dayCell.addEventListener('click', () => {
 	  const dayStr = day.toString().padStart(2, '0');
 	  const monthStr = (month + 1).toString().padStart(2, '0');
@@ -61,7 +76,8 @@ function renderCalendar() {
     }
 
     dayCell.className = `${baseClasses} ${style}`;
-    calendar.appendChild(dayCell);
+    dayCell.classList.add('relative'); // Enable absolute positioning inside
+	calendar.appendChild(dayCell);
   }
 }
 
