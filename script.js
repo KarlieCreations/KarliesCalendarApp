@@ -90,7 +90,7 @@ function renderCalendar() {
 
     // Base classes
     let baseClasses = 'rounded text-center';
-    let style = 'bg-white shadow';
+    let style = 'bg-white/80 shadow';
 
     if (isCurrentMonth && day === today.getDate()) {
       // Highlight today
@@ -168,8 +168,11 @@ function handleSwipeOrDrag() {
 function showChecklist(key) {
   checklistTitle.textContent = `Checkliste für ${key}`;
   checklistModal.classList.remove('hidden');
+  selectedDayKey = key;
+  birthdayInput.value = getBirthday(key); // Load saved name
   renderChecklist();
 }
+
 
 function hideChecklist() {
   checklistModal.classList.add('hidden');
@@ -222,6 +225,25 @@ function renderChecklist() {
     checklistItems.appendChild(li);
   });
 }
+
+const birthdayInput = document.getElementById('birthdayName');
+const saveBirthdayBtn = document.getElementById('saveBirthdayBtn');
+
+function getBirthday(key) {
+  return localStorage.getItem('birthday-' + key) || '';
+}
+
+function saveBirthday(key, name) {
+  localStorage.setItem('birthday-' + key, name);
+}
+
+saveBirthdayBtn.addEventListener('click', () => {
+  const name = birthdayInput.value.trim();
+  if (name) {
+    saveBirthday(selectedDayKey, name);
+  }
+});
+
 
 addItemBtn.addEventListener('click', () => {
   const text = newItemInput.value.trim();
