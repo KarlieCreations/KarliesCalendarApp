@@ -5,9 +5,32 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kalender App</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+  body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: background-image 0.5s ease-in-out;
+  }
+
+  body.spring {
+    background-image: url('./assets/spring.png');
+  }
+
+  body.summer {
+    background-image: url('./assets/summer.png');
+  }
+
+  body.autumn {
+    background-image: url('./assets/autumn.png');
+  }
+
+  body.winter {
+    background-image: url('./assets/winter.png');
+  }
+</style>
 </head>
-<body class="min-h-screen bg-cover bg-center bg-no-repeat text-gray-800"
-      style="background-image: url('./assets/disco-summer-bg.png');">
+<body class="min-h-screen bg-cover bg-center bg-no-repeat text-gray-800">
 
 <!-- <div class="bg-white/70 backdrop-blur-sm min-h-screen"> -->
   <div class="flex flex-col flex-grow max-w-xl tablet:max-w-3xl mx-auto w-full p-4">

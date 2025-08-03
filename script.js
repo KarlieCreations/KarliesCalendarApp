@@ -11,12 +11,33 @@ const backToCalendar = document.getElementById('backToCalendar');
 
 let selectedDayKey = null; // Format: MM-DD
 
+  function updateSeasonBackground(month) {
+  const body = document.body;
+
+  // Remove any previous season class
+  body.classList.remove('spring', 'summer', 'autumn', 'winter');
+
+  // Determine season
+  let season = '';
+  if ([2, 3, 4].includes(month)) {
+    season = 'spring';
+  } else if ([5, 6, 7].includes(month)) {
+    season = 'summer';
+  } else if ([8, 9, 10].includes(month)) {
+    season = 'autumn';
+  } else {
+    season = 'winter';
+  }
+
+  body.classList.add(season);
+}
 
 function renderCalendar() {
   calendar.innerHTML = '';
 
   const year = date.getFullYear();
   const month = date.getMonth();
+  updateSeasonBackground(month);
   const firstWeekday = new Date(year, month, 1).getDay(); // 0 = Sunday
   const shiftedFirstDay = (firstWeekday + 6) % 7; // Make Monday = 0
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -27,6 +48,7 @@ function renderCalendar() {
   // Show month name in German
   monthYear.textContent = date.toLocaleString('de-DE', { month: 'long', year: 'numeric' });
 
+   
   // Fill initial blank days
   for (let i = 0; i < shiftedFirstDay; i++) {
     const emptyCell = document.createElement('div');
@@ -79,9 +101,13 @@ function renderCalendar() {
     dayCell.classList.add('relative'); // Enable absolute positioning inside
 	calendar.appendChild(dayCell);
   }
+  
+
+
+  
 }
 
-
+ 
 
 document.getElementById('prev').onclick = () => {
   date.setMonth(date.getMonth() - 1);

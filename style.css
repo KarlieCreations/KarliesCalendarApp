@@ -1,0 +1,22 @@
+ body {
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: background-image 0.5s ease-in-out;
+  }
+
+  body.spring {
+    background-image: url('./assets/spring.png');
+  }
+
+  body.summer {
+    background-image: url('./assets/summer.png');
+  }
+
+  body.autumn {
+    background-image: url('./assets/autumn.png');
+  }
+
+  body.winter {
+    background-image: url('./assets/winter.png');
+  }
