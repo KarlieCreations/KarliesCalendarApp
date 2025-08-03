@@ -268,5 +268,6 @@ addItemBtn.addEventListener('click', () => {
 
 backToCalendar.addEventListener('click', () => {
   hideChecklist();
+  renderCalendar(); // <- refreshes the grid
 });
 
