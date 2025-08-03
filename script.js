@@ -57,51 +57,61 @@ function renderCalendar() {
   }
 
   // Fill actual days
-  for (let day = 1; day <= daysInMonth; day++) {
-    const dayCell = document.createElement('div');
-    dayCell.textContent = day;
-	const dayStr = day.toString().padStart(2, '0');
-	const monthStr = (month + 1).toString().padStart(2, '0');
-	const key = `${monthStr}-${dayStr}`;
-	const checklist = JSON.parse(localStorage.getItem('checklist-' + key) || '[]');
-	const hasChecklist = checklist.length > 0;
+ for (let day = 1; day <= daysInMonth; day++) {
+  const dayStr = day.toString().padStart(2, '0');
+  const monthStr = (month + 1).toString().padStart(2, '0');
+  const key = `${monthStr}-${dayStr}`;
+  const checklist = JSON.parse(localStorage.getItem('checklist-' + key) || '[]');
+  const birthdayName = localStorage.getItem('birthday-' + key) || '';
+  const hasChecklist = checklist.length > 0;
+  const hasBirthday = birthdayName.trim() !== '';
 
-	// Add marker dot
-	if (hasChecklist) {
-	  const dot = document.createElement('div');
-	  dot.className = 'absolute top-1 left-1 w-4 h-4 rounded-full';
-	  dot.style.backgroundColor =
-		isCurrentMonth && day === today.getDate() ? '#FF00AA' : '#dc2626'; // Neon pink or red
-	  dayCell.appendChild(dot);
-	}
+  const dayCell = document.createElement('div');
+  let baseClasses = 'rounded text-center';
+  let style = 'bg-white/80 shadow';
 
-	dayCell.addEventListener('click', () => {
-	  const dayStr = day.toString().padStart(2, '0');
-	  const monthStr = (month + 1).toString().padStart(2, '0');
-	  selectedDayKey = `${monthStr}-${dayStr}`;
-	  showChecklist(selectedDayKey);
-	});
+ if (isCurrentMonth && day === today.getDate()) {
+  style = 'bg-blue-200 text-blue-800 font-semibold border border-blue-300';
+}
 
-    // ✅ New square + centering style
-    dayCell.style.aspectRatio = '1 / 1'; // keeps it square
-    dayCell.style.display = 'flex';
-    dayCell.style.alignItems = 'center';
-    dayCell.style.justifyContent = 'center';
 
-    // Base classes
-    let baseClasses = 'rounded text-center';
-    let style = 'bg-white/80 shadow';
+  dayCell.className = `${baseClasses} ${style}`;
+  dayCell.classList.add('relative', 'flex', 'flex-col', 'justify-between', 'items-center', 'p-1');
 
-    if (isCurrentMonth && day === today.getDate()) {
-      // Highlight today
-      style = 'bg-blue-500 text-white font-bold shadow-md border-2 border-blue-700';
-    }
+  dayCell.style.aspectRatio = '1 / 1';
 
-    dayCell.className = `${baseClasses} ${style}`;
-    dayCell.classList.add('relative'); // Enable absolute positioning inside
-	calendar.appendChild(dayCell);
+  // Day number
+  const numberDiv = document.createElement('div');
+  numberDiv.textContent = day;
+  numberDiv.className = 'text-base';
+  dayCell.appendChild(numberDiv);
+
+  // Add dot if checklist or birthday exists
+  if (hasChecklist || hasBirthday) {
+    const dot = document.createElement('div');
+    dot.className = 'absolute top-1 left-1 w-3 h-3 rounded-full';
+    dot.style.backgroundColor =
+      isCurrentMonth && day === today.getDate() ? '#FF00AA' : '#dc2626';
+    dayCell.appendChild(dot);
   }
-  
+
+  // Add birthday name below number
+  if (hasBirthday) {
+    const nameTag = document.createElement('div');
+    nameTag.innerHTML = "🎂<br>" + birthdayName;
+    nameTag.className = 'text-[12px] mt-1 text-gray-700 truncate max-w-full text-center';
+	nameTag.style.color = '#FF48B0';
+    dayCell.appendChild(nameTag);
+  }
+
+  // Click handler
+  dayCell.addEventListener('click', () => {
+    selectedDayKey = key;
+    showChecklist(key);
+  });
+
+  calendar.appendChild(dayCell);
+}
 
 
   
